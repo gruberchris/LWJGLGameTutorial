@@ -37,7 +37,7 @@ public class Main implements Runnable {
     }
 
     private void render() {
-        window.swapBUffers();
+        window.swapBuffers();
     }
 
     public static void main(String[] args) {
