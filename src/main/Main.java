@@ -21,9 +21,13 @@ public class Main implements Runnable {
         init();
 
         while(!window.shouldClose()) {
+            // Game loop
             update();
             render();
         }
+
+        // Game is shutting down
+        window.destroy();
     }
 
     private void update() {

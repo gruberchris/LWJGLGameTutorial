@@ -9,6 +9,7 @@ public class Window {
     private long window;
     public int frames;
     public long time;
+    public Input input;
 
     public Window(int width, int height, String title) {
         this.width = width;
@@ -21,6 +22,8 @@ public class Window {
             System.err.println("ERROR: GLFW wasn't initialized");
             return;
         }
+
+        input = new Input();
 
         window = GLFW.glfwCreateWindow(width, height, title, 0, 0);
 
@@ -35,6 +38,10 @@ public class Window {
 
         GLFW.glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
         GLFW.glfwMakeContextCurrent(window);
+
+        GLFW.glfwSetKeyCallback(window, input.getKeyboardCallback());
+        GLFW.glfwSetCursorPosCallback(window, input.getMouseMoveCallback());
+        GLFW.glfwSetMouseButtonCallback(window, input.getMouseButtonsCallback());
 
         GLFW.glfwShowWindow(window);
 
@@ -54,6 +61,11 @@ public class Window {
             time = System.currentTimeMillis();
             frames = 0;
         }
+
+        if (input.isButtonDown((GLFW.GLFW_MOUSE_BUTTON_LEFT))) {
+            // NOTE: prints 1 message for each N frames rendered while button is pressed down
+            System.out.println("X: " + input.getMouseX() + ", Y: " + input.getMouseY());
+        }
     }
 
     public void swapBUffers() {
@@ -61,6 +73,13 @@ public class Window {
     }
 
     public boolean shouldClose() {
-        return GLFW.glfwWindowShouldClose(window);
+        return GLFW.glfwWindowShouldClose(window) || input.isKeyDown(GLFW.GLFW_KEY_ESCAPE);
+    }
+
+    public void destroy() {
+        input.destroy();
+        GLFW.glfwWindowShouldClose(window);
+        GLFW.glfwDestroyWindow(window);
+        GLFW.glfwTerminate();
     }
 }
