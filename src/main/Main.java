@@ -15,6 +15,7 @@ public class Main implements Runnable {
         final int WIDTH = 1280;
         final int HEIGHT = 760;
         window = new Window(WIDTH, HEIGHT, "Game Tutorial");
+        window.setBackgroundColor(1.0f, 0, 0);
         window.create();
     }
 

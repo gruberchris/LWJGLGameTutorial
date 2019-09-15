@@ -1,6 +1,9 @@
 package engine.io;
 
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -12,6 +15,12 @@ public class Window {
     private int frames;
     private long time;
     private Input input;
+
+    // This can be converted to a vector later
+    private float backgroundR, backgroundG, backgroundB;
+
+    private GLFWWindowSizeCallback sizeCallback;
+    private boolean isReized;
 
     public Window(int width, int height, String title) {
         this.width = width;
@@ -42,9 +51,9 @@ public class Window {
         glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
         glfwMakeContextCurrent(window);
 
-        glfwSetKeyCallback(window, input.getKeyboardCallback());
-        glfwSetCursorPosCallback(window, input.getMouseMoveCallback());
-        glfwSetMouseButtonCallback(window, input.getMouseButtonsCallback());
+        GL.createCapabilities();
+
+        createCallbacks();
 
         glfwShowWindow(window);
 
@@ -54,7 +63,31 @@ public class Window {
         time = System.currentTimeMillis();
     }
 
+    private void createCallbacks() {
+        sizeCallback = new GLFWWindowSizeCallback() {
+            @Override
+            public void invoke(long window, int w, int h) {
+                width = w;
+                height = h;
+                isReized = true;
+            }
+        };
+
+        glfwSetKeyCallback(window, input.getKeyboardCallback());
+        glfwSetCursorPosCallback(window, input.getMouseMoveCallback());
+        glfwSetMouseButtonCallback(window, input.getMouseButtonsCallback());
+        glfwSetWindowSizeCallback(window, sizeCallback);
+    }
+
     public void update() {
+        if (isReized) {
+            GL11.glViewport(0, 0, width, height);
+            isReized = false;
+        }
+
+        GL11.glClearColor(backgroundR, backgroundG, backgroundB, 1.0f);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+
         glfwPollEvents();
 
         frames++;
@@ -84,5 +117,12 @@ public class Window {
         glfwWindowShouldClose(window);
         glfwDestroyWindow(window);
         glfwTerminate();
+    }
+
+    // the arguments can be converted to a vector later
+    public void setBackgroundColor(float r, float g, float b) {
+        backgroundR = r;
+        backgroundG = g;
+        backgroundB = b;
     }
 }
