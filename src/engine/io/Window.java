@@ -1,7 +1,8 @@
 package engine.io;
 
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
+
+import static org.lwjgl.glfw.GLFW.*;
 
 public class Window {
     private int width, height;
@@ -18,68 +19,68 @@ public class Window {
     }
 
     public void create() {
-        if (!GLFW.glfwInit()) {
+        if (!glfwInit()) {
             System.err.println("ERROR: GLFW wasn't initialized");
             return;
         }
 
         input = new Input();
 
-        window = GLFW.glfwCreateWindow(width, height, title, 0, 0);
+        window = glfwCreateWindow(width, height, title, 0, 0);
 
         if (window == 0) {
             System.err.println("ERROR: window wasn't created");
             return;
         }
 
-        GLFWVidMode videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+        GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
         assert videoMode != null;
 
-        GLFW.glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
-        GLFW.glfwMakeContextCurrent(window);
+        glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
+        glfwMakeContextCurrent(window);
 
-        GLFW.glfwSetKeyCallback(window, input.getKeyboardCallback());
-        GLFW.glfwSetCursorPosCallback(window, input.getMouseMoveCallback());
-        GLFW.glfwSetMouseButtonCallback(window, input.getMouseButtonsCallback());
+        glfwSetKeyCallback(window, input.getKeyboardCallback());
+        glfwSetCursorPosCallback(window, input.getMouseMoveCallback());
+        glfwSetMouseButtonCallback(window, input.getMouseButtonsCallback());
 
-        GLFW.glfwShowWindow(window);
+        glfwShowWindow(window);
 
         // Setting the value to 1 should limit to 60 FPS
-        GLFW.glfwSwapInterval(1);
+        glfwSwapInterval(1);
 
         time = System.currentTimeMillis();
     }
 
     public void update() {
-        GLFW.glfwPollEvents();
+        glfwPollEvents();
 
         frames++;
 
         if (System.currentTimeMillis() > time + 1000) {
-            GLFW.glfwSetWindowTitle(window, title + " | FPS: " + frames);
+            glfwSetWindowTitle(window, title + " | FPS: " + frames);
             time = System.currentTimeMillis();
             frames = 0;
         }
 
-        if (input.isButtonDown((GLFW.GLFW_MOUSE_BUTTON_LEFT))) {
+        if (input.isButtonDown((GLFW_MOUSE_BUTTON_LEFT))) {
             // NOTE: prints 1 message for each N frames rendered while button is pressed down
             System.out.println("X: " + input.getMouseX() + ", Y: " + input.getMouseY());
         }
     }
 
     public void swapBUffers() {
-        GLFW.glfwSwapBuffers(window);
+        glfwSwapBuffers(window);
     }
 
     public boolean shouldClose() {
-        return GLFW.glfwWindowShouldClose(window) || input.isKeyDown(GLFW.GLFW_KEY_ESCAPE);
+        return glfwWindowShouldClose(window) || input.isKeyDown(GLFW_KEY_ESCAPE);
     }
 
     public void destroy() {
         input.destroy();
-        GLFW.glfwWindowShouldClose(window);
-        GLFW.glfwDestroyWindow(window);
-        GLFW.glfwTerminate();
+        glfwWindowShouldClose(window);
+        glfwDestroyWindow(window);
+        glfwTerminate();
     }
 }

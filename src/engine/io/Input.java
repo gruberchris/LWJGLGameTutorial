@@ -1,9 +1,10 @@
 package engine.io;
 
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
+
+import static org.lwjgl.glfw.GLFW.*;
 
 public class Input {
     private boolean[] keys;
@@ -14,13 +15,13 @@ public class Input {
     private GLFWMouseButtonCallback mouseButtons;
 
     public Input() {
-        keys = new boolean[GLFW.GLFW_KEY_LAST];
-        buttons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
+        keys = new boolean[GLFW_KEY_LAST];
+        buttons = new boolean[GLFW_MOUSE_BUTTON_LAST];
 
         keyboard = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
-                keys[key] = (action != GLFW.GLFW_RELEASE);
+                keys[key] = (action != GLFW_RELEASE);
             }
         };
 
@@ -35,7 +36,7 @@ public class Input {
         mouseButtons = new GLFWMouseButtonCallback() {
             @Override
             public void invoke(long window, int button, int action, int mods) {
-                buttons[button] = (action != GLFW.GLFW_RELEASE);
+                buttons[button] = (action != GLFW_RELEASE);
             }
         };
     }

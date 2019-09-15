@@ -3,7 +3,7 @@ package main;
 import engine.io.Window;
 
 public class Main implements Runnable {
-    public Thread gameThread;
+    private Thread gameThread;
     public Window window;
     public final int WIDTH = 1280, HEIGHT = 760;
 
@@ -12,7 +12,7 @@ public class Main implements Runnable {
         gameThread.start();
     }
 
-    public void init() {
+    private void init() {
         window = new Window(WIDTH, HEIGHT, "Game Tutorial");
         window.create();
     }
