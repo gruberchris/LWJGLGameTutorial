@@ -4,15 +4,16 @@ import engine.io.Window;
 
 public class Main implements Runnable {
     private Thread gameThread;
-    public Window window;
-    public final int WIDTH = 1280, HEIGHT = 760;
+    private Window window;
 
-    public void start() {
+    private void start() {
         gameThread = new Thread(this,"gameThread");
         gameThread.start();
     }
 
     private void init() {
+        final int WIDTH = 1280;
+        final int HEIGHT = 760;
         window = new Window(WIDTH, HEIGHT, "Game Tutorial");
         window.create();
     }

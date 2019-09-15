@@ -3,14 +3,15 @@ package engine.io;
 import org.lwjgl.glfw.GLFWVidMode;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
     private int width, height;
     private String title;
     private long window;
-    public int frames;
-    public long time;
-    public Input input;
+    private int frames;
+    private long time;
+    private Input input;
 
     public Window(int width, int height, String title) {
         this.width = width;
@@ -26,9 +27,10 @@ public class Window {
 
         input = new Input();
 
-        window = glfwCreateWindow(width, height, title, 0, 0);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        window = glfwCreateWindow(width, height, title, NULL, NULL);
 
-        if (window == 0) {
+        if (window == NULL) {
             System.err.println("ERROR: window wasn't created");
             return;
         }
