@@ -1,5 +1,6 @@
 package engine.io;
 
+import engine.maths.Vector3f;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
@@ -15,10 +16,7 @@ public class Window {
     private int frames;
     private long time;
     private Input input;
-
-    // This can be converted to a vector later
-    private float backgroundR, backgroundG, backgroundB;
-
+    private Vector3f background;
     private GLFWWindowSizeCallback sizeCallback;
     private boolean isResized;
     private boolean isFullscreen;
@@ -32,6 +30,7 @@ public class Window {
 
         windowPosX = new int[1];
         windowPosY = new int[1];
+        background = new Vector3f(0, 0, 0);
     }
 
     public void create() {
@@ -102,7 +101,7 @@ public class Window {
             }
         }
 
-        GL11.glClearColor(backgroundR, backgroundG, backgroundB, 1.0f);
+        GL11.glClearColor(background.getX(), background.getY(), background.getZ(), 1.0f);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
         glfwPollEvents();
@@ -141,11 +140,8 @@ public class Window {
         glfwTerminate();
     }
 
-    // the arguments can be converted to a vector later
     public void setBackgroundColor(float r, float g, float b) {
-        backgroundR = r;
-        backgroundG = g;
-        backgroundB = b;
+        background.set(r, g, b);
     }
 
     public int getFrames() {
@@ -161,15 +157,15 @@ public class Window {
     }
 
     public float getBackgroundR() {
-        return backgroundR;
+        return background.getX();
     }
 
     public float getBackgroundG() {
-        return backgroundG;
+        return background.getY();
     }
 
     public float getBackgroundB() {
-        return backgroundB;
+        return background.getZ();
     }
 
     public GLFWWindowSizeCallback getSizeCallback() {

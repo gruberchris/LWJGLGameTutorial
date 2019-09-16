@@ -1,10 +1,26 @@
 package main;
 
+import engine.graphics.Mesh;
+import engine.graphics.Renderer;
+import engine.graphics.Vertex;
 import engine.io.Window;
+import engine.maths.Vector3f;
 
 public class Main implements Runnable {
     private Thread gameThread;
     private Window window;
+
+    public Mesh mesh = new Mesh(new Vertex[] {
+            new Vertex(new Vector3f(-0.5f, 0.5f, 0.0f)),
+            new Vertex(new Vector3f(-0.5f, -0.5f, 0.0f)),
+            new Vertex(new Vector3f(0.5f, -0.5f, 0.0f)),
+            new Vertex(new Vector3f(0.5f, 0.5f, 0.0f))
+    }, new int[] {
+            0, 1, 2,
+            0, 3, 2
+    });
+
+    public Renderer renderer;
 
     private void start() {
         gameThread = new Thread(this,"gameThread");
@@ -15,8 +31,10 @@ public class Main implements Runnable {
         final int WIDTH = 1280;
         final int HEIGHT = 760;
         window = new Window(WIDTH, HEIGHT, "Game Tutorial");
+        renderer = new Renderer();
         window.setBackgroundColor(1.0f, 0, 0);
         window.create();
+        mesh.create();
     }
 
     public void run() {
@@ -37,6 +55,7 @@ public class Main implements Runnable {
     }
 
     private void render() {
+        renderer.renderMesh(mesh);
         window.swapBuffers();
     }
 
