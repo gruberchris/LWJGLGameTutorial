@@ -14,7 +14,8 @@ public class Renderer {
     public void renderMesh(Mesh mesh) {
         // bind
         GL30.glBindVertexArray(mesh.getVAO());
-        GL30.glEnableVertexAttribArray(0);
+        GL30.glEnableVertexAttribArray(0);  // position
+        GL30.glEnableVertexAttribArray(1);  // color
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, mesh.getIBO());
         shader.bind();
 
@@ -25,6 +26,7 @@ public class Renderer {
         shader.unbind();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
         GL30.glDisableVertexAttribArray(0);
+        GL30.glDisableVertexAttribArray(1);
         GL30.glBindVertexArray(0);
     }
 }
