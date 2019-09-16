@@ -2,6 +2,7 @@ package main;
 
 import engine.graphics.Mesh;
 import engine.graphics.Renderer;
+import engine.graphics.Shader;
 import engine.graphics.Vertex;
 import engine.io.Window;
 import engine.maths.Vector3f;
@@ -21,6 +22,7 @@ public class Main implements Runnable {
     });
 
     public Renderer renderer;
+    public Shader shader;
 
     private void start() {
         gameThread = new Thread(this,"gameThread");
@@ -31,10 +33,12 @@ public class Main implements Runnable {
         final int WIDTH = 1280;
         final int HEIGHT = 760;
         window = new Window(WIDTH, HEIGHT, "Game Tutorial");
-        renderer = new Renderer();
+        shader = new Shader("/shaders/mainVertex.glsl", "/shaders/mainFragment.glsl");
+        renderer = new Renderer(shader);
         window.setBackgroundColor(1.0f, 0, 0);
         window.create();
         mesh.create();
+        shader.create();
     }
 
     public void run() {
